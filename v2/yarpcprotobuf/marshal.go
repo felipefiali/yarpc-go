@@ -21,6 +21,7 @@
 package yarpcprotobuf
 
 import (
+	"fmt"
 	"io"
 
 	"github.com/gogo/protobuf/jsonpb"
@@ -52,7 +53,7 @@ func unmarshal(encoding yarpc.Encoding, reader io.Reader, message proto.Message)
 	case yarpcjson.Encoding:
 		return _jsonUnmarshaler.Unmarshal(reader, message)
 	default:
-		return yarpcerror.Newf(yarpcerror.CodeInternal, "failed to unmarshal unexpected encoding %q", encoding)
+		return yarpcerror.New(yarpcerror.CodeInternal, fmt.Sprintf("failed to unmarshal unexpected encoding %q", encoding))
 	}
 }
 
@@ -63,7 +64,7 @@ func marshal(encoding yarpc.Encoding, message proto.Message) (*yarpc.Buffer, err
 	case yarpcjson.Encoding:
 		return marshalJSON(message)
 	default:
-		return nil, yarpcerror.Newf(yarpcerror.CodeInternal, "failed to marshal unexpected encoding %q", encoding)
+		return nil, yarpcerror.New(yarpcerror.CodeInternal, fmt.Sprintf("failed to marshal unexpected encoding %q", encoding))
 	}
 }
 
